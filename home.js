@@ -21,12 +21,14 @@ window.addEventListener('message', (event) => {
     }
     if (event.data && event.data.shopSlideHeight) {
         const envslideView = document.getElementById('envslideView');
-
         const googleAddressView = document.getElementById('googleAddressView');
-
-        envslideView.style.height = `${event.data.shopSlideHeight}px`;
-        googleAddressView.style.height = `${event.data.shopSlideHeight}px`;
-
+        
+        // Adjust height based on screen size
+        const isMobile = window.innerWidth <= 768;
+        const adjustedHeight = isMobile ? Math.min(event.data.shopSlideHeight, 400) : event.data.shopSlideHeight;
+        
+        envslideView.style.height = `${adjustedHeight}px`;
+        googleAddressView.style.height = `${isMobile ? 300 : adjustedHeight}px`;
     }
 
 
@@ -100,5 +102,55 @@ document.getElementById('downloadButton').addEventListener('click', function () 
     } else {
         // If not an iOS device, show an alert message
         alert('This client currently supports only iPhone and iPad. Android support is coming soon!');
+    }
+});
+
+// Christmas Snowflake Animation
+function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + '%';
+    snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    snowflake.style.opacity = Math.random();
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    const container = document.getElementById('snowflakes-container');
+    if (container) {
+        container.appendChild(snowflake);
+        
+        // Remove snowflake after animation
+        setTimeout(() => {
+            if (snowflake.parentNode) {
+                snowflake.parentNode.removeChild(snowflake);
+            }
+        }, 5000);
+    }
+}
+
+// Create snowflakes periodically
+function startSnowfall() {
+    setInterval(createSnowflake, 300);
+}
+
+// Start snowfall when page loads
+window.addEventListener('load', startSnowfall);
+
+// Handle window resize for mobile responsiveness
+window.addEventListener('resize', function() {
+    adjustTheViewHeight();
+    
+    // Adjust footer iframes on resize
+    const isMobile = window.innerWidth <= 768;
+    const envslideView = document.getElementById('envslideView');
+    const googleAddressView = document.getElementById('googleAddressView');
+    
+    if (isMobile) {
+        if (envslideView) {
+            envslideView.style.height = '400px';
+        }
+        if (googleAddressView) {
+            googleAddressView.style.height = '300px';
+        }
     }
 });
