@@ -2,6 +2,11 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    background: transparent !important;
+}
+
+.tag-scroll-view {
+    background: transparent;
 }
 
 /* Container for each section */
@@ -28,12 +33,13 @@ body {
 /* Tag item */
 .tag-item {
     width: 105px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     cursor: pointer;
     flex-shrink: 0; /* Prevent shrinking to maintain fixed width */
+    backdrop-filter: blur(5px);
 }
 
 /* Tag image */
@@ -51,7 +57,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
+    background-color: rgba(240, 240, 240, 0.7);
     color: #888;
 }
 

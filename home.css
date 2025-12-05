@@ -96,8 +96,40 @@
 /* Adjust top margin for content to account for fixed header */
 body {
     margin-top: 80px; /* Adjust this value based on header height */
-    background: linear-gradient(180deg, #f5f5f5 0%, #ffffff 100%);
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
+    background-attachment: fixed;
     position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Add animated background stars */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 40%, white, transparent),
+        radial-gradient(1px 1px at 33% 60%, white, transparent),
+        radial-gradient(3px 3px at 10% 80%, white, transparent);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.4;
+    animation: sparkle 20s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes sparkle {
+    from { transform: translateY(0); }
+    to { transform: translateY(-200px); }
 }
 
 /*!* Other existing styles *!*/
@@ -120,15 +152,29 @@ body {
     padding: 0;
     display: block;
     border: none; /* Remove any default border from the iframe */
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
 
+#tagScrollView {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
+
+#envslideView {
+    background: transparent;
 }
 
 #productDetails {
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: none;
+    position: relative;
+    z-index: 1001;
 }
 
 /* Footer Section */
@@ -137,9 +183,13 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     padding: 20px;
-    background-color: #f5f5f5;
+    background: linear-gradient(135deg, rgba(245, 245, 245, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
     margin-top: 20px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
 }
 
 .footer-left {
@@ -201,8 +251,8 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
-    z-index: 1000; /* Ensure it's on top of other content */
+    background: rgba(0, 0, 0, 0.85); /* Semi-transparent background */
+    z-index: 2000; /* Ensure it's on top of other content */
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -237,19 +287,36 @@ body {
     z-index: 999;
 }
 
-.snowflake {
+#snowflakes-container {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 500;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
     color: white;
     font-size: 1.5em;
-    font-family: Arial;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    font-family: Arial, sans-serif;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
     animation: fall linear infinite;
     pointer-events: none;
+    user-select: none;
+    top: -50px;
 }
 
 @keyframes fall {
-    to {
-        transform: translateY(100vh) rotate(360deg);
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) translateX(50px) rotate(360deg);
         opacity: 0;
     }
 }

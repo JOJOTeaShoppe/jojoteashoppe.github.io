@@ -150,25 +150,32 @@ function createSnowflake() {
     snowflake.innerHTML = '❄';
     snowflake.style.left = Math.random() * 100 + '%';
     snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-    snowflake.style.opacity = Math.random();
-    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    snowflake.style.opacity = Math.random() * 0.8 + 0.2; // Opacity between 0.2 and 1
+    snowflake.style.fontSize = (Math.random() * 15 + 15) + 'px';
+    snowflake.style.animationDelay = Math.random() * 2 + 's';
     
     const container = document.getElementById('snowflakes-container');
     if (container) {
         container.appendChild(snowflake);
         
-        // Remove snowflake after animation
+        // Remove snowflake after animation completes
+        const duration = parseFloat(snowflake.style.animationDuration) * 1000;
         setTimeout(() => {
             if (snowflake.parentNode) {
                 snowflake.parentNode.removeChild(snowflake);
             }
-        }, 5000);
+        }, duration);
     }
 }
 
 // Create snowflakes periodically
 function startSnowfall() {
-    setInterval(createSnowflake, 300);
+    // Create initial snowflakes
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => createSnowflake(), i * 200);
+    }
+    // Continue creating snowflakes
+    setInterval(createSnowflake, 500);
 }
 
 // Start snowfall when page loads
