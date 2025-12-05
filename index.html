@@ -13,7 +13,10 @@
         <img src="logo.png" alt="JOJO TEA SHOPPE Logo" class="header-logo">
         <h1 class="header-title">Welcome to <span class="christmas-accent">JOJO TEA SHOPPE</span></h1>
     </div>
-    <button class="download-button" id="downloadButton">Download App</button>
+    <div class="header-buttons">
+        <button class="order-button" id="orderButton">Order</button>
+        <button class="download-button" id="downloadButton">Download App</button>
+    </div>
 </header>
 
 <!-- Container for the Top Scroll View -->
@@ -30,6 +33,24 @@
     <iframe id="productDetailFrame" width="100%" height="500px" style="border: none;"></iframe>
 </div>
 
+<!-- Order Selection Modal -->
+<div id="orderModal" class="modal">
+    <div class="order-modal-content">
+        <button id="closeOrderModal" class="close-button">X</button>
+        <h2>Choose Order Type</h2>
+        <div class="order-options">
+            <button class="order-option-btn" id="instoreOption">
+                <span class="order-icon">🏪</span>
+                <span class="order-text">In-Store</span>
+            </button>
+            <button class="order-option-btn" id="deliveryOption">
+                <span class="order-icon">🚚</span>
+                <span class="order-text">Delivery</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Footer Section -->
 <footer class="footer">
     <div class="footer-left">
@@ -37,8 +58,46 @@
     </div>
 
     <div class="footer-right">
+        <div id="deliveryButtons" class="delivery-buttons" style="display: none;">
+            <h3>Order Delivery:</h3>
+            <div class="delivery-platforms">
+                <a href="https://www.doordash.com/en/store/jojo-tea-shoppe-rancho-cucamonga-27910420/33325176/?event_type=autocomplete&pickup=false" class="delivery-btn" id="doordashBtn" target="_blank">
+                    <span class="platform-icon">🍔</span>
+                    <span class="platform-name">DoorDash</span>
+                </a>
+                <a href="https://www.ubereats.com/store/jojo-tea-shoppe/GuvZABxtQkyZf02idtI3kg?diningMode=DELIVERY&sc=SEARCH_SUGGESTION" class="delivery-btn" id="uberBtn" target="_blank">
+                    <span class="platform-icon">🚗</span>
+                    <span class="platform-name">Uber Eats</span>
+                </a>
+                <a href="https://www.grubhub.com/restaurant/jojo-tea-shoppe-9779-base-line-rd-rancho-cucamonga/7936968" class="delivery-btn" id="grubhubBtn" target="_blank">
+                    <span class="platform-icon">🍕</span>
+                    <span class="platform-name">Grubhub</span>
+                </a>
+                <a href="https://www.fantuanorder.com/store/Restaurant/us-19640?rTraceId=s-1-1-1996744853299470350" class="delivery-btn" id="fantuanBtn" target="_blank">
+                    <span class="platform-icon">🥡</span>
+                    <span class="platform-name">Fantuan</span>
+                </a>
+            </div>
+        </div>
         <p>PHONE: 909-244-0245</p>
         <p>ADDRESS: 9779 Base Line Rd, Rancho Cucamonga, CA</p>
+        <div class="social-media">
+            <h4>Follow Us:</h4>
+            <div class="social-links">
+                <a href="https://www.yelp.com/biz/jojo-tea-shoppe-rancho-cucamonga-3" class="social-btn" target="_blank" title="Yelp">
+                    <span class="social-icon">⭐</span>
+                    <span class="social-name">Yelp</span>
+                </a>
+                <a href="https://www.instagram.com/jojo_tea_shoppe/" class="social-btn" target="_blank" title="Instagram">
+                    <span class="social-icon">📷</span>
+                    <span class="social-name">Instagram</span>
+                </a>
+                <a href="https://www.tiktok.com/@jojoteashoppe" class="social-btn" target="_blank" title="TikTok">
+                    <span class="social-icon">🎵</span>
+                    <span class="social-name">TikTok</span>
+                </a>
+            </div>
+        </div>
         <iframe id="googleAddressView" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d206.43792875355794!2d-117.59169386420321!3d34.12057410411273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c33663e2ee35bb%3A0xe72701fa9a9307e5!2s9779%20Base%20Line%20Rd%2C%20Rancho%20Cucamonga%2C%20CA%2091730!5e0!3m2!1sen!2sus!4v1710142341773!5m2!1sen!2sus"
                 width="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>

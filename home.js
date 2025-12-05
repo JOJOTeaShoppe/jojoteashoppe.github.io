@@ -85,23 +85,61 @@ function adjustTheViewHeight() {
 adjustTheViewHeight()
 
 
-document.getElementById('downloadButton').addEventListener('click', function () {
-    // Check if the user is using an iOS device
-
-    // alert(navigator.userAgent);
-    
+// Function to navigate to app download
+function navigateToAppDownload() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-    // const universalLink = 'https://www.jojoteashoppe.com/apple-app-site-association';
-
-    const universalLink = "https://apps.apple.com/app/jojo-tea-shoppe/id6636472025";
-
+    
     if (isIOS) {
-        // If the client is an iOS device, navigate to the App Store link
-        window.location.href = 'https://apps.apple.com/app/jojo-tea-shoppe/id6636472025'; // Replace with your App Store link
+        window.location.href = 'https://apps.apple.com/app/jojo-tea-shoppe/id6636472025';
     } else {
-        // If not an iOS device, show an alert message
         alert('This client currently supports only iPhone and iPad. Android support is coming soon!');
+    }
+}
+
+document.getElementById('downloadButton').addEventListener('click', function () {
+    navigateToAppDownload();
+});
+
+// Order Button functionality
+const orderButton = document.getElementById('orderButton');
+const orderModal = document.getElementById('orderModal');
+const closeOrderModal = document.getElementById('closeOrderModal');
+const instoreOption = document.getElementById('instoreOption');
+const deliveryOption = document.getElementById('deliveryOption');
+const deliveryButtons = document.getElementById('deliveryButtons');
+
+// Open order modal
+orderButton.addEventListener('click', function() {
+    orderModal.style.display = 'flex';
+});
+
+// Close order modal
+closeOrderModal.addEventListener('click', function() {
+    orderModal.style.display = 'none';
+});
+
+// Close modal when clicking outside
+orderModal.addEventListener('click', function(e) {
+    if (e.target === orderModal) {
+        orderModal.style.display = 'none';
+    }
+});
+
+// Handle In-Store option
+instoreOption.addEventListener('click', function() {
+    orderModal.style.display = 'none';
+    navigateToAppDownload();
+});
+
+// Handle Delivery option
+deliveryOption.addEventListener('click', function() {
+    orderModal.style.display = 'none';
+    // Show delivery buttons
+    deliveryButtons.style.display = 'block';
+    // Scroll to footer
+    const footer = document.querySelector('.footer');
+    if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 });
 
@@ -134,7 +172,66 @@ function startSnowfall() {
 }
 
 // Start snowfall when page loads
-window.addEventListener('load', startSnowfall);
+window.addEventListener('load', function() {
+    startSnowfall();
+    
+    // Set up delivery platform buttons after DOM is loaded
+    setupDeliveryButtons();
+});
+
+// Delivery platform URLs
+const deliveryUrls = {
+    doordash: 'https://www.doordash.com/en/store/jojo-tea-shoppe-rancho-cucamonga-27910420/33325176/?event_type=autocomplete&pickup=false',
+    uber: 'https://www.ubereats.com/store/jojo-tea-shoppe/GuvZABxtQkyZf02idtI3kg?diningMode=DELIVERY&sc=SEARCH_SUGGESTION',
+    grubhub: 'https://www.grubhub.com/restaurant/jojo-tea-shoppe-9779-base-line-rd-rancho-cucamonga/7936968',
+    fantuan: 'https://www.fantuanorder.com/store/Restaurant/us-19640?rTraceId=s-1-1-1996744853299470350'
+};
+
+// Set up delivery platform buttons
+function setupDeliveryButtons() {
+    const doordashBtn = document.getElementById('doordashBtn');
+    const uberBtn = document.getElementById('uberBtn');
+    const grubhubBtn = document.getElementById('grubhubBtn');
+    const fantuanBtn = document.getElementById('fantuanBtn');
+    
+    // Set initial href values
+    if (doordashBtn) {
+        doordashBtn.href = deliveryUrls.doordash;
+    }
+    if (uberBtn) {
+        uberBtn.href = deliveryUrls.uber;
+    }
+    if (grubhubBtn) {
+        grubhubBtn.href = deliveryUrls.grubhub;
+    }
+    if (fantuanBtn) {
+        fantuanBtn.href = deliveryUrls.fantuan;
+    }
+}
+
+// Function to update delivery URLs (to be called when addresses are provided)
+function updateDeliveryUrls(urls) {
+    if (urls.doordash) {
+        deliveryUrls.doordash = urls.doordash;
+        const btn = document.getElementById('doordashBtn');
+        if (btn) btn.href = urls.doordash;
+    }
+    if (urls.uber) {
+        deliveryUrls.uber = urls.uber;
+        const btn = document.getElementById('uberBtn');
+        if (btn) btn.href = urls.uber;
+    }
+    if (urls.grubhub) {
+        deliveryUrls.grubhub = urls.grubhub;
+        const btn = document.getElementById('grubhubBtn');
+        if (btn) btn.href = urls.grubhub;
+    }
+    if (urls.fantuan) {
+        deliveryUrls.fantuan = urls.fantuan;
+        const btn = document.getElementById('fantuanBtn');
+        if (btn) btn.href = urls.fantuan;
+    }
+}
 
 // Handle window resize for mobile responsiveness
 window.addEventListener('resize', function() {
