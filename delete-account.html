@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - JOJO TEA SHOPPE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #d4af37;
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .app-name {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        .steps {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #d4af37;
+        }
+        
+        .step {
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #d4af37;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .step-content {
+            color: #555;
+            margin-left: 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .warning-box strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .data-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .data-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .data-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .data-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .data-category {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-right: 10px;
+        }
+        
+        .delete-icon {
+            color: #dc3545;
+            margin-right: 5px;
+        }
+        
+        .retain-icon {
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        
+        .contact-section {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .contact-section a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .contact-section a:hover {
+            text-decoration: underline;
+        }
+        
+        .app-button {
+            display: inline-block;
+            background-color: #d4af37;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .app-button:hover {
+            background-color: #b8941f;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #777;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="JOJO TEA SHOPPE Logo" class="logo">
+            <h1>Delete Your <span class="app-name">JOJO TEA SHOPPE</span> Account</h1>
+            <p style="color: #777; margin-top: 10px;">Request account deletion and data removal</p>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Important Notice</strong>
+            <p>Deleting your account is permanent and cannot be undone. All your account data, order history, VIP membership, and associated information will be permanently deleted. Please ensure you have saved any important information before proceeding.</p>
+        </div>
+
+        <h2>How to Request Account Deletion</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <div class="step-title">Open the JOJO TEA SHOPPE App</div>
+                    <div class="step-content">Launch the JOJO TEA SHOPPE mobile application on your device (iOS or Android).</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <div class="step-title">Navigate to Settings</div>
+                    <div class="step-content">Go to your Profile page and tap on "Settings" or the settings icon.</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <div class="step-title">Select "Delete Account"</div>
+                    <div class="step-content">Scroll down to find the "Delete Account" option and tap on it.</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <div class="step-title">Confirm Deletion</div>
+                    <div class="step-content">Read the warning message carefully and confirm that you want to permanently delete your account. You may be asked to enter your password or provide additional verification.</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">5</div>
+                <div>
+                    <div class="step-title">Account Deletion Process</div>
+                    <div class="step-content">Once confirmed, your account deletion request will be processed immediately. Your account and associated data will be permanently deleted.</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Alternative Method: Contact Support</h2>
+        <p>If you are unable to delete your account through the app, you can contact our support team:</p>
+        <div class="contact-section">
+            <p><strong>Email:</strong> <a href="mailto:support@jojoteashoppe.com">support@jojoteashoppe.com</a></p>
+            <p><strong>Website:</strong> <a href="https://www.jojoteashoppe.com">www.jojoteashoppe.com</a></p>
+            <p>Please include your account email address and request account deletion in your message.</p>
+        </div>
+
+        <h2>What Data Will Be Deleted</h2>
+        <div class="data-section">
+            <p>The following data will be <strong>permanently deleted</strong> when you delete your account:</p>
+            <ul class="data-list">
+                <li>
+                    <span class="data-category">Account Information:</span>
+                    <span class="delete-icon">🗑️</span>
+                    Username, email address, password, profile information, and account settings
+                </li>
+                <li>
+                    <span class="data-category">VIP Membership:</span>
+                    <span class="delete-icon">🗑️</span>
+                    VIP card number, membership level, balance, and all VIP-related data
+                </li>
+                <li>
+                    <span class="data-category">Order History:</span>
+                    <span class="delete-icon">🗑️</span>
+                    All past orders, order details, and transaction history
+                </li>
+                <li>
+                    <span class="data-category">Shopping Cart:</span>
+                    <span class="delete-icon">🗑️</span>
+                    Saved cart items and preferences
+                </li>
+                <li>
+                    <span class="data-category">Profile Images:</span>
+                    <span class="delete-icon">🗑️</span>
+                    User avatar and uploaded profile pictures
+                </li>
+                <li>
+                    <span class="data-category">Device Information:</span>
+                    <span class="delete-icon">🗑️</span>
+                    Device identifiers, push notification tokens, and app preferences
+                </li>
+            </ul>
+        </div>
+
+        <h2>Data Retention and Legal Requirements</h2>
+        <div class="data-section">
+            <h3>Retention Period</h3>
+            <p>Once you request account deletion, your data will be permanently deleted <strong>immediately</strong> upon confirmation. There is no retention period for deleted accounts.</p>
+            
+            <h3>Legal and Regulatory Requirements</h3>
+            <p>In certain circumstances, we may be required by law to retain certain information for a specific period. This may include:</p>
+            <ul class="data-list">
+                <li>
+                    <span class="retain-icon">⚠️</span>
+                    <strong>Financial Records:</strong> Transaction records may be retained for up to 7 years as required by tax and financial regulations
+                </li>
+                <li>
+                    <span class="retain-icon">⚠️</span>
+                    <strong>Legal Disputes:</strong> Information related to ongoing legal proceedings or disputes may be retained until resolution
+                </li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Note:</strong> Such retained data will be anonymized and used only for legal compliance purposes, not for any other business activities.</p>
+        </div>
+
+        <h2>What Happens After Deletion</h2>
+        <div class="data-section">
+            <ul class="data-list">
+                <li>You will no longer be able to log in to your account</li>
+                <li>All your personal information will be removed from our active systems</li>
+                <li>You will lose access to your order history and VIP membership benefits</li>
+                <li>Any active subscriptions or pending orders will be cancelled</li>
+                <li>You will need to create a new account if you wish to use JOJO TEA SHOPPE services again in the future</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p><strong>JOJO TEA SHOPPE</strong></p>
+            <p>Last updated: December 2024</p>
+            <p style="margin-top: 15px;">
+                <a href="privacy.html" style="color: #777; text-decoration: none;">Privacy Policy</a> | 
+                <a href="terms.html" style="color: #777; text-decoration: none;">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
