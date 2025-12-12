@@ -8,9 +8,24 @@
 
 ## 部署步骤
 
-### 方法1：使用部署脚本（推荐）
+### 方法1：使用一键部署脚本（最推荐）⭐
 
-每次部署前运行：
+最简单的方式，自动完成版本更新和代码提交：
+
+```bash
+cd jojosteashoppe.github.io
+./deploy.sh
+```
+
+脚本会自动：
+1. ✅ 更新版本号（格式：YYYYMMDDHHMM）
+2. ✅ 检查未提交的更改
+3. ✅ 提交所有更改（包括版本号和代码）
+4. ✅ 询问是否推送到远程仓库
+
+### 方法2：使用版本更新脚本
+
+如果只想更新版本号，不自动提交：
 
 ```bash
 cd jojosteashoppe.github.io
@@ -20,9 +35,7 @@ git commit -m "Update version for deployment"
 git push
 ```
 
-脚本会自动生成新的版本号（格式：YYYYMMDDHHMM，例如：202412041530）
-
-### 方法2：手动更新
+### 方法3：手动更新
 
 编辑 `version.js` 文件，更新版本号：
 
