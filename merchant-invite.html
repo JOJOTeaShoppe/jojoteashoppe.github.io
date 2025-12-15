@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邀请店主 - JOJO TEA SHOPPE</title>
+    <script src="version.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #d4af37;
+        }
+
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .intro-section {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .intro-section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .app-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .app-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .app-card:hover {
+            border-color: #d4af37;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .app-card h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-icon {
+            font-size: 1.5em;
+        }
+
+        .app-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            margin-top: 40px;
+        }
+
+        .form-section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-group label .required {
+            color: #dc3545;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group .help-text {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .warning-box strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .warning-box ul {
+            margin-left: 20px;
+            margin-top: 10px;
+            color: #856404;
+        }
+
+        .warning-box li {
+            margin-bottom: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #b8941f 0%, #9a7d17 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #155724;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #b8941f;
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .app-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="JOJO TEA SHOPPE Logo" class="logo">
+            <h1>邀请店主使用 JOJO TEA SHOPPE</h1>
+            <p class="subtitle">Merchant 和 KIOSK 应用申请</p>
+        </div>
+
+        <div class="intro-section">
+            <h2>欢迎加入 JOJO TEA SHOPPE 生态系统</h2>
+            <p style="color: #666; font-size: 1.05em; margin-bottom: 20px;">
+                我们诚邀您使用我们的专业管理工具，提升您的店铺运营效率。通过以下应用，您可以更好地管理订单、库存和客户服务。
+            </p>
+
+            <div class="app-cards">
+                <div class="app-card">
+                    <h3>
+                        <span class="app-icon">📱</span>
+                        JOJO TEA SHOPPE Merchant
+                    </h3>
+                    <p>
+                        专为店主设计的移动管理应用，让您随时随地管理店铺订单、查看销售数据、处理客户服务等。
+                    </p>
+                </div>
+
+                <div class="app-card">
+                    <h3>
+                        <span class="app-icon">🖥️</span>
+                        JOJO TEA SHOPPE KIOSK
+                    </h3>
+                    <p>
+                        店内自助点餐系统，为顾客提供便捷的点餐体验，同时减轻您的服务压力，提高订单处理效率。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ 重要提示</strong>
+            <p style="color: #856404; margin-top: 10px;">
+                在提交申请前，请确保您已清楚了解以下信息：
+            </p>
+            <ul>
+                <li>您的店铺名称和联系方式</li>
+                <li>您希望使用 Merchant 和/或 KIOSK 的具体目的</li>
+                <li>您的店铺位置和运营情况</li>
+                <li>您对系统功能的具体需求</li>
+            </ul>
+            <p style="color: #856404; margin-top: 15px; font-weight: 600;">
+                请详细填写申请表单，这将帮助我们更好地了解您的需求并为您提供合适的解决方案。
+            </p>
+        </div>
+
+        <div class="form-section">
+            <h2>申请表单</h2>
+            <form id="applicationForm">
+                <div class="form-group">
+                    <label for="name">
+                        姓名 <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="请输入您的姓名"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        邮箱地址 <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="your.email@example.com"
+                        required
+                    >
+                    <div class="help-text">我们将通过此邮箱与您联系</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        联系电话 <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="(123) 456-7890"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="storeName">
+                        店铺名称 <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="storeName" 
+                        name="storeName" 
+                        placeholder="请输入您的店铺名称"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="storeAddress">
+                        店铺地址
+                    </label>
+                    <input 
+                        type="text" 
+                        id="storeAddress" 
+                        name="storeAddress" 
+                        placeholder="请输入您的店铺地址（可选）"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="appType">
+                        希望使用的应用 <span class="required">*</span>
+                    </label>
+                    <select id="appType" name="appType" required>
+                        <option value="">请选择</option>
+                        <option value="merchant">仅 Merchant</option>
+                        <option value="kiosk">仅 KIOSK</option>
+                        <option value="both">Merchant 和 KIOSK</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">
+                        使用目的和需求 <span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="purpose" 
+                        name="purpose" 
+                        placeholder="请详细说明您希望使用这些应用的目的、具体需求、预期效果等。例如：&#10;- 需要管理多店铺订单&#10;- 希望提高点餐效率&#10;- 需要查看销售数据分析&#10;- 其他具体需求..."
+                        required
+                    ></textarea>
+                    <div class="help-text">
+                        请尽可能详细地描述您的需求，这将帮助我们为您提供更好的服务
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalInfo">
+                        其他信息
+                    </label>
+                    <textarea 
+                        id="additionalInfo" 
+                        name="additionalInfo" 
+                        placeholder="您可以在此提供任何其他相关信息（可选）"
+                    ></textarea>
+                </div>
+
+                <div class="error-message" id="formError"></div>
+                <div class="success-message" id="successMessage">
+                    <strong>✓ 申请已提交！</strong>
+                    <p style="margin-top: 10px;">
+                        您的申请已成功发送。我们的团队将在1-2个工作日内通过您提供的邮箱与您联系。感谢您的申请！
+                    </p>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    提交申请
+                </button>
+            </form>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← 返回首页</a>
+        </div>
+
+        <div class="footer">
+            <p><strong>JOJO TEA SHOPPE</strong></p>
+            <p>如有任何问题，请联系：<a href="mailto:support@jojoteashoppe.com" style="color: #d4af37;">support@jojoteashoppe.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('applicationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formError = document.getElementById('formError');
+        const successMessage = document.getElementById('successMessage');
+
+        // Format phone number as user types
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.slice(0, 10);
+            
+            if (value.length > 0) {
+                let formatted = '';
+                if (value.length <= 3) {
+                    formatted = `(${value}`;
+                } else if (value.length <= 6) {
+                    formatted = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    formatted = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
+                }
+                e.target.value = formatted;
+            } else {
+                e.target.value = '';
+            }
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Hide previous messages
+            formError.classList.remove('show');
+            successMessage.classList.remove('show');
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Validate required fields
+            if (!data.name || !data.email || !data.phone || !data.storeName || !data.appType || !data.purpose) {
+                formError.textContent = '请填写所有必填字段';
+                formError.classList.add('show');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(data.email)) {
+                formError.textContent = '请输入有效的邮箱地址';
+                formError.classList.add('show');
+                return;
+            }
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = '提交中...';
+
+            // Prepare email content
+            const appTypeText = {
+                'merchant': '仅 Merchant',
+                'kiosk': '仅 KIOSK',
+                'both': 'Merchant 和 KIOSK'
+            };
+
+            const subject = encodeURIComponent(`JOJO TEA SHOPPE Merchant/KIOSK 申请 - ${data.storeName}`);
+            const body = encodeURIComponent(`新的 Merchant/KIOSK 申请：
+
+申请人信息：
+- 姓名：${data.name}
+- 邮箱：${data.email}
+- 电话：${data.phone}
+
+店铺信息：
+- 店铺名称：${data.storeName}
+- 店铺地址：${data.storeAddress || '未提供'}
+
+申请详情：
+- 希望使用的应用：${appTypeText[data.appType]}
+
+使用目的和需求：
+${data.purpose}
+
+${data.additionalInfo ? `其他信息：\n${data.additionalInfo}` : ''}
+
+---
+此申请通过网站表单提交
+提交时间：${new Date().toLocaleString('zh-CN')}
+`);
+
+            // Create mailto link
+            const mailtoLink = `mailto:support@jojoteashoppe.com?subject=${subject}&body=${body}`;
+
+            // Open email client
+            window.location.href = mailtoLink;
+
+            // Show success message after a short delay
+            setTimeout(() => {
+                successMessage.classList.add('show');
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交申请';
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 500);
+        });
+
+        // Reset form error when user starts typing
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (formError.classList.contains('show')) {
+                    formError.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
