@@ -265,22 +265,45 @@ window.addEventListener('resize', function() {
 });
 
 // Header opacity control on scroll
-let lastScrollTop = 0;
-const header = document.querySelector('.header');
-
-window.addEventListener('scroll', function() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+function setupHeaderScrollEffect() {
+    const header = document.querySelector('.header');
     
-    if (scrollTop === 0) {
-        // At the top, fully opaque
-        header.style.opacity = '1';
-        header.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    } else {
-        // Scrolling down, make transparent
-        const opacity = Math.max(0.1, 1 - (scrollTop / 100));
-        header.style.opacity = opacity.toString();
-        header.style.backgroundColor = `rgba(0, 0, 0, ${0.7 * opacity})`;
+    if (!header) {
+        // Retry if header not found yet
+        setTimeout(setupHeaderScrollEffect, 100);
+        return;
     }
     
-    lastScrollTop = scrollTop;
-}, false);
+    let lastScrollTop = 0;
+    
+    function handleScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop === 0) {
+            // At the top, fully opaque
+            header.style.opacity = '1';
+            header.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        } else {
+            // Scrolling down, make transparent
+            const opacity = Math.max(0.1, 1 - (scrollTop / 100));
+            header.style.opacity = opacity.toString();
+            header.style.backgroundColor = `rgba(0, 0, 0, ${0.7 * opacity})`;
+        }
+        
+        lastScrollTop = scrollTop;
+    }
+    
+    // Initial check
+    handleScroll();
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, false);
+}
+
+// Setup header scroll effect when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeaderScrollEffect);
+} else {
+    // DOM already loaded
+    setupHeaderScrollEffect();
+}
