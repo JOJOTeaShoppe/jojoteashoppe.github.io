@@ -143,22 +143,24 @@ function updateCarousel() {
     const carousel = document.getElementById('carousel');
     const carouselItem = document.querySelector(".carousel-item");
 
+    if (!carouselItem) return;
+
     // Calculate the width of a single slide
     const slideWidth = carouselItem.clientWidth;
-    const margin = parseInt(getComputedStyle(carouselItem).marginRight);
+    const margin = parseInt(getComputedStyle(carouselItem).marginRight) || 0;
     const moveWidth = slideWidth + margin * 2;
 
     // Calculate the total width of the carousel based on the number of slides
     const carouselWrapperWidth = carouselWrapper.clientWidth;
-    const carouselWidth = carousel.clientWidth;
 
     // Calculate the offset to center the current slide
-    const offset = (carouselWrapperWidth - moveWidth) / 2 + initOffset;
+    // Center position = wrapper width / 2 - slide width / 2
+    const centerOffset = carouselWrapperWidth / 2 - slideWidth / 2;
+    const translateX = centerOffset - currentIndex * moveWidth;
 
     // Update the transform to show the current slide
     carousel.style.transition = 'transform 0.5s ease';
-    console.log(carouselWrapperWidth, carouselWidth, slideWidth, margin,moveWidth, offset, (offset - currentIndex * moveWidth));
-    carousel.style.transform = `translateX(${offset - currentIndex * moveWidth}px)`;
+    carousel.style.transform = `translateX(${translateX}px)`;
 
     isAnimating = false;
 
@@ -209,27 +211,18 @@ function adjustCarouselHeight() {
     const browserWidth = window.innerWidth;
 
     // Set the height of the carousel wrapper
-    carouselWrapper.style.height = `${browserHeight * 0.95}px`; // 80% of the browser height
-    // carouselWrapper.style.width = `${browserHeight * 0.95 * 9 / 16}px`; // 80% of the browser height
-    carouselWrapper.style.width = `${browserWidth - 20}px`; // 80% of the browser height
+    carouselWrapper.style.height = `${browserHeight * 0.95}px`;
+    carouselWrapper.style.width = `${browserWidth - 20}px`;
 
     carouselItems.forEach((item) => {
         item.style.height = `${browserHeight * 0.8}px`;
         item.style.width = `${browserHeight * 0.8 * 0.95 * 9 / 16}px`;
     });
-    initOffset = (carouselItems.length/2 - 0.5) * (browserHeight * 0.8 * 0.95 * 9 / 16 + 10) - browserWidth/2 ;
-    // initOffset = browserHeight * 0.8 * 0.95 * 9 / 16 + 10;
-    // Center the first item by setting the initial offset
-    setInitialCarouselOffset(initOffset);
-
-}
-
-function setInitialCarouselOffset(offset) {
-    const carousel = document.getElementById('carousel');
-
-    // Apply the offset to the carousel
-    carousel.style.transform = `translateX(${offset}px)`;
-    // carousel.style.transform = `translateX(${0}px)`;
+    
+    // Update carousel position after adjusting height
+    if (carouselItems.length > 0) {
+        updateCarousel();
+    }
 }
 
 

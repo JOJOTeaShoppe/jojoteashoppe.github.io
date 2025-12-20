@@ -52,10 +52,13 @@
 <header class="header christmas-header">
     <div class="header-title-container">
         <img src="logo.png" alt="JOJO TEA SHOPPE Logo" class="header-logo">
-        <h1 class="header-title">Welcome to <span class="christmas-accent">JOJO TEA SHOPPE</span></h1>
+        <h1 class="header-title">
+            <span class="title-line">Welcome to</span>
+            <span class="christmas-accent">JOJO TEA SHOPPE</span>
+        </h1>
     </div>
     <div class="header-buttons">
-        <button class="order-button" id="orderButton">Order</button>
+        <button class="order-button" id="orderButton">Order Now</button>
         <button class="download-button" id="downloadButton">Download App</button>
     </div>
 </header>
@@ -70,8 +73,11 @@
 <!-- Container for the Product Details (Modal) -->
 <div id="productDetails" class="modal">
     <button id="closeButton" class="close-button">X</button>
-    <img id="productImage" src="" alt="Product Image" class="product-image">
-    <iframe id="productDetailFrame" width="100%" height="500px" style="border: none;"></iframe>
+    <div class="product-image-container">
+        <img id="productImage" src="" alt="Product Image" class="product-image">
+        <button class="product-order-button" id="productOrderButton">Order Now</button>
+    </div>
+    <iframe id="productDetailFrame" width="100%" height="500px" style="border: none; display: none;"></iframe>
 </div>
 
 <!-- Order Selection Modal -->
@@ -103,19 +109,19 @@
             <h3>Order Delivery:</h3>
             <div class="delivery-platforms">
                 <a href="https://www.doordash.com/en/store/jojo-tea-shoppe-rancho-cucamonga-27910420/33325176/?event_type=autocomplete&pickup=false" class="delivery-btn" id="doordashBtn" target="_blank">
-                    <span class="platform-icon">🍔</span>
+                    <img src="images/doordash.png" alt="DoorDash" class="platform-icon-img">
                     <span class="platform-name">DoorDash</span>
                 </a>
                 <a href="https://www.ubereats.com/store/jojo-tea-shoppe/GuvZABxtQkyZf02idtI3kg?diningMode=DELIVERY&sc=SEARCH_SUGGESTION" class="delivery-btn" id="uberBtn" target="_blank">
-                    <span class="platform-icon">🚗</span>
+                    <img src="images/uber.png" alt="Uber Eats" class="platform-icon-img">
                     <span class="platform-name">Uber Eats</span>
                 </a>
                 <a href="https://www.grubhub.com/restaurant/jojo-tea-shoppe-9779-base-line-rd-rancho-cucamonga/7936968" class="delivery-btn" id="grubhubBtn" target="_blank">
-                    <span class="platform-icon">🍕</span>
+                    <img src="images/grubhub.png" alt="Grubhub" class="platform-icon-img">
                     <span class="platform-name">Grubhub</span>
                 </a>
                 <a href="https://www.fantuanorder.com/store/Restaurant/us-19640?rTraceId=s-1-1-1996744853299470350" class="delivery-btn" id="fantuanBtn" target="_blank">
-                    <span class="platform-icon">🥡</span>
+                    <img src="images/fantuan.png" alt="Fantuan" class="platform-icon-img">
                     <span class="platform-name">Fantuan</span>
                 </a>
             </div>

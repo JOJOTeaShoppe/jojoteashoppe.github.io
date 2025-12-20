@@ -37,6 +37,35 @@
 .header-title {
     margin: 0;
     font-size: 1.5rem;
+    white-space: normal;
+    line-height: 1.2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3em;
+}
+
+.header-title .title-line {
+    white-space: nowrap;
+}
+
+.header-title .christmas-accent {
+    white-space: nowrap;
+}
+
+/* When space is limited, force line break */
+@media screen and (max-width: 1200px) {
+    .header-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.1em;
+    }
+    
+    .header-title .title-line,
+    .header-title .christmas-accent {
+        display: block;
+        width: 100%;
+    }
 }
 
 .header-buttons {
@@ -62,6 +91,9 @@
 .order-button::before {
     content: '🛒';
     margin-right: 5px;
+    display: inline-block;
+    width: 1.2em;
+    text-align: center;
 }
 
 .order-button:hover {
@@ -87,6 +119,9 @@
 .download-button::before {
     content: '🎁';
     margin-right: 5px;
+    display: inline-block;
+    width: 1.2em;
+    text-align: center;
 }
 
 .download-button:hover {
@@ -158,7 +193,7 @@ body::before {
     position: relative;
     z-index: 1;
     background: transparent;
-    margin-top: 0; /* Ensure no top margin */
+    margin-top: 90px; /* Add margin to prevent header from covering content */
 }
 
 #tagScrollView {
@@ -177,13 +212,27 @@ body::before {
 }
 
 #productDetails {
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    border-radius: 0;
+    box-shadow: none;
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+    overflow: hidden;
+}
+
+.product-image-container {
     position: relative;
-    z-index: 1001;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Footer Section */
@@ -273,11 +322,26 @@ body::before {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9);
     border: none;
-    padding: 10px;
+    padding: 12px 16px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2001;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.close-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
 }
 
 /* Product image styling */
@@ -285,8 +349,43 @@ body::before {
     display: block;
     max-width: 100%;
     max-height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+/* Product order button in modal */
+.product-order-button {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    transition: all 0.3s ease;
+    z-index: 2001;
+}
+
+.product-order-button::before {
+    content: '🛒';
+    margin-right: 8px;
+    display: inline-block;
+    width: 1.2em;
+    text-align: center;
+}
+
+.product-order-button:hover {
+    background: linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
 }
 
 /* Christmas Theme Styles */
@@ -492,6 +591,13 @@ body::before {
     margin-bottom: 10px;
 }
 
+.platform-icon-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
 .platform-name {
     font-weight: bold;
     font-size: 1rem;
@@ -560,6 +666,14 @@ body::before {
 @media screen and (max-width: 768px) {
     .header-title {
         font-size: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .header-title .title-line,
+    .header-title .christmas-accent {
+        display: block;
+        width: 100%;
     }
     
     .header-logo {

@@ -13,6 +13,20 @@ document.getElementById('closeButton').addEventListener('click', () => {
     document.getElementById('productDetails').style.display = 'none';
 });
 
+// Product order button in modal - same functionality as header order button
+const productOrderButton = document.getElementById('productOrderButton');
+if (productOrderButton) {
+    productOrderButton.addEventListener('click', function() {
+        // Close product details modal
+        document.getElementById('productDetails').style.display = 'none';
+        // Open order modal
+        const orderModal = document.getElementById('orderModal');
+        if (orderModal) {
+            orderModal.style.display = 'flex';
+        }
+    });
+}
+
 // Listen for messages to display the product details
 window.addEventListener('message', (event) => {
     if (event.data && event.data.tagScrollViewHeight) {
@@ -69,16 +83,24 @@ window.addEventListener('alertProductDetail', (event) => {
 function adjustProductImageSize() {
     const productImage = document.getElementById('productImage');
     const screenHeight = window.innerHeight;
-    productImage.style.height = `${screenHeight}px`;
-    productImage.style.width = `${screenHeight * (9 / 16)}px`;
+    const screenWidth = window.innerWidth;
+    
+    // Make image fill the screen while maintaining aspect ratio
+    productImage.style.maxWidth = '100vw';
+    productImage.style.maxHeight = '100vh';
+    productImage.style.width = 'auto';
+    productImage.style.height = 'auto';
 }
 
 
 function adjustTheViewHeight() {
     const browserHeight = window.innerHeight;
     const topScrollView = document.querySelector('#topScrollView');
+    const header = document.querySelector('.header');
+    const headerHeight = header ? header.offsetHeight : 90; // Get header height or use default 90px
 
-    topScrollView.style.height = `${browserHeight * 0.99}px`;
+    // Subtract header height from viewport height
+    topScrollView.style.height = `${browserHeight - headerHeight}px`;
     topScrollView.style.width = `${window.innerWidth}px`;
 }
 
