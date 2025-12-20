@@ -95,6 +95,12 @@ function initializeCarousel() {
     carousel.addEventListener('mouseup', endDrag);
     carousel.addEventListener('mouseleave', endDrag);
     carousel.addEventListener('mousemove', handleDrag);
+    
+    // Set initial position to center the first element after a short delay
+    setTimeout(() => {
+        currentIndex = 1; // First real item (index 0 is the last item clone, index 1 is first real item)
+        updateCarousel();
+    }, 100);
 }
 
 
@@ -145,17 +151,24 @@ function updateCarousel() {
 
     if (!carouselItem) return;
 
+    // Get screen width
+    const screenWidth = window.innerWidth;
+    const carouselWrapperWidth = carouselWrapper.clientWidth;
+
     // Calculate the width of a single slide
     const slideWidth = carouselItem.clientWidth;
-    const margin = parseInt(getComputedStyle(carouselItem).marginRight) || 0;
-    const moveWidth = slideWidth + margin * 2;
-
-    // Calculate the total width of the carousel based on the number of slides
-    const carouselWrapperWidth = carouselWrapper.clientWidth;
+    // Get margin (padding) from both sides
+    const margin = parseInt(getComputedStyle(carouselItem).marginLeft) || 0;
+    const marginRight = parseInt(getComputedStyle(carouselItem).marginRight) || 0;
+    const totalMargin = margin + marginRight;
+    
+    // Calculate move distance: element width + padding (margin)
+    const moveWidth = slideWidth + totalMargin;
 
     // Calculate the offset to center the current slide
     // Center position = wrapper width / 2 - slide width / 2
     const centerOffset = carouselWrapperWidth / 2 - slideWidth / 2;
+    // Calculate translateX: center offset minus (currentIndex * moveWidth)
     const translateX = centerOffset - currentIndex * moveWidth;
 
     // Update the transform to show the current slide
@@ -208,11 +221,12 @@ function adjustCarouselHeight() {
     const carouselWrapper = document.querySelector('.carousel-wrapper');
     const carouselItems = document.querySelectorAll('.carousel-item');
 
-    const browserWidth = window.innerWidth;
+    // Get screen width
+    const screenWidth = window.innerWidth;
 
     // Set the height of the carousel wrapper
     carouselWrapper.style.height = `${browserHeight * 0.95}px`;
-    carouselWrapper.style.width = `${browserWidth - 20}px`;
+    carouselWrapper.style.width = `${screenWidth}px`;
 
     carouselItems.forEach((item) => {
         item.style.height = `${browserHeight * 0.8}px`;
@@ -220,8 +234,13 @@ function adjustCarouselHeight() {
     });
     
     // Update carousel position after adjusting height
+    // Set initial position to center the first element (index 1, which is the first real item)
     if (carouselItems.length > 0) {
-        updateCarousel();
+        // Wait a bit for layout to settle
+        setTimeout(() => {
+            currentIndex = 1; // Reset to first real item
+            updateCarousel();
+        }, 100);
     }
 }
 

@@ -86,6 +86,9 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    min-width: 140px;
+    text-align: center;
 }
 
 .order-button::before {
@@ -114,6 +117,9 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    min-width: 140px;
+    text-align: center;
 }
 
 .download-button::before {
@@ -654,6 +660,13 @@ body::before {
 
 .social-icon {
     font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.social-icon-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
     margin-bottom: 5px;
 }
 
