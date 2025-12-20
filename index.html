@@ -3,14 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Jojo Tea Shoppe - Home</title>
-    <script src="version.js"></script>
     <script>
-        // Load CSS with version to bust cache on deployment
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'home.css?v=' + (window.APP_VERSION || Date.now());
-        document.head.appendChild(link);
+        // Load version.js and other resources with proper caching
+        (function() {
+            // First, fetch version.js to extract version number
+            fetch('version.js?t=' + Date.now())
+                .then(response => response.text())
+                .then(text => {
+                    // Extract version number from version.js content
+                    const match = text.match(/window\.APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
+                    const version = match ? match[1] : Date.now();
+                    
+                    // Execute version.js code
+                    eval(text);
+                    
+                    // Load version.js with version number for proper caching (for future loads)
+                    const versionScript = document.createElement('script');
+                    versionScript.src = 'version.js?v=' + version;
+                    document.head.appendChild(versionScript);
+                    
+                    // Load CSS with version
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = 'home.css?v=' + version;
+                    document.head.appendChild(link);
+                })
+                .catch(() => {
+                    // Fallback: use timestamp if fetch fails
+                    const version = Date.now();
+                    const versionScript = document.createElement('script');
+                    versionScript.src = 'version.js?v=' + version;
+                    document.head.appendChild(versionScript);
+                    
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = 'home.css?v=' + version;
+                    document.head.appendChild(link);
+                });
+        })();
     </script>
 
 </head>
