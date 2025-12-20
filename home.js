@@ -269,10 +269,24 @@ function setupHeaderScrollEffect() {
     const header = document.querySelector('.header');
     
     if (!header) {
+        console.warn('Header element not found, retrying...');
         // Retry if header not found yet
         setTimeout(setupHeaderScrollEffect, 100);
         return;
     }
+    
+    // Force fixed positioning to ensure header stays at top
+    header.style.position = 'fixed';
+    header.style.top = '0';
+    header.style.left = '0';
+    header.style.width = '100%';
+    header.style.zIndex = '1000';
+    
+    // Debug: Log header position
+    const computedStyle = window.getComputedStyle(header);
+    console.log('Header position:', computedStyle.position);
+    console.log('Header top:', computedStyle.top);
+    console.log('Header z-index:', computedStyle.zIndex);
     
     let lastScrollTop = 0;
     let currentOpacity = 1;
