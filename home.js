@@ -88,11 +88,15 @@ adjustTheViewHeight()
 // Function to navigate to app download
 function navigateToAppDownload() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isAndroid = /Android/.test(navigator.userAgent);
     
     if (isIOS) {
         window.location.href = 'https://apps.apple.com/app/jojo-tea-shoppe/id6636472025';
+    } else if (isAndroid) {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.jjts&pcampaignid=web_share';
     } else {
-        alert('This client currently supports only iPhone and iPad. Android support is coming soon!');
+        // Default to Android for other platforms
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.jjts&pcampaignid=web_share';
     }
 }
 
@@ -259,3 +263,24 @@ window.addEventListener('resize', function() {
         }
     }
 });
+
+// Header opacity control on scroll
+let lastScrollTop = 0;
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop === 0) {
+        // At the top, fully opaque
+        header.style.opacity = '1';
+        header.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    } else {
+        // Scrolling down, make transparent
+        const opacity = Math.max(0.1, 1 - (scrollTop / 100));
+        header.style.opacity = opacity.toString();
+        header.style.backgroundColor = `rgba(0, 0, 0, ${0.7 * opacity})`;
+    }
+    
+    lastScrollTop = scrollTop;
+}, false);
