@@ -275,19 +275,30 @@ function setupHeaderScrollEffect() {
     }
     
     let lastScrollTop = 0;
+    let currentOpacity = 1;
+    const fadeSpeed = 0.03; // How fast to fade per scroll event
     
     function handleScroll() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
         if (scrollTop === 0) {
             // At the top, fully opaque
+            currentOpacity = 1;
             header.style.opacity = '1';
             header.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
         } else {
-            // Scrolling down, make transparent
-            const opacity = Math.max(0.1, 1 - (scrollTop / 100));
-            header.style.opacity = opacity.toString();
-            header.style.backgroundColor = `rgba(0, 0, 0, ${0.7 * opacity})`;
+            // Determine scroll direction
+            if (scrollTop > lastScrollTop && scrollTop > 10) {
+                // Scrolling down: decrease opacity
+                currentOpacity = Math.max(0, currentOpacity - fadeSpeed);
+            } else if (scrollTop < lastScrollTop) {
+                // Scrolling up: increase opacity
+                currentOpacity = Math.min(1, currentOpacity + fadeSpeed * 2);
+            }
+            
+            // Apply opacity
+            header.style.opacity = currentOpacity.toString();
+            header.style.backgroundColor = `rgba(0, 0, 0, ${0.7 * currentOpacity})`;
         }
         
         lastScrollTop = scrollTop;
@@ -296,8 +307,17 @@ function setupHeaderScrollEffect() {
     // Initial check
     handleScroll();
     
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll, false);
+    // Add scroll event listener with throttling for better performance
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                handleScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, false);
 }
 
 // Setup header scroll effect when DOM is ready
