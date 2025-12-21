@@ -5,10 +5,12 @@ const slideDuration = 5000; // 5 seconds for each slide
 let isAnimating = false;
 let dragStartX = 0;
 let dragOffset = 0;
+let isDragging = false;
 
-let initOffset = 0
-
-
+// Constants similar to iOS implementation
+const spacing = 20; // spacing between items
+const zoomRatio = 0.9; // zoom ratio for non-current items
+const defaultPadding = 2; // default padding
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchHomePageData();
@@ -28,12 +30,15 @@ function fetchHomePageData() {
             if (data.status === 200 && data.data && data.data.pageSectionDtoList) {
                 const mostPopularSection = data.data.pageSectionDtoList.find(section => section.title === 'Most Popular');
                 if (mostPopularSection) {
-                    items = [mostPopularSection.content[mostPopularSection.content.length - 1], ...mostPopularSection.content, mostPopularSection.content[0]]; // Create loopItems
+                    // Create loopItems: [last, ...items, first]
+                    items = [
+                        mostPopularSection.content[mostPopularSection.content.length - 1],
+                        ...mostPopularSection.content,
+                        mostPopularSection.content[0]
+                    ];
                     initializeCarousel();
-                    startAutoSlide(); // Start auto slide after initializing the carousel
-                    // Call the function to set the initial height
+                    startAutoSlide();
                     adjustCarouselHeight();
-
                 }
             } else {
                 console.error('Unexpected API response:', data);
@@ -50,7 +55,7 @@ function initializeCarousel() {
 
     items.forEach((item, index) => {
         const imageUrl = item.images && item.images[0] ? item.images[0] : '';
-        const tag = item.popularProduct?.tag || 'In Demand'; // Use tag or a default value
+        const tag = item.popularProduct?.tag || 'In Demand';
         const name = item.name || 'Unnamed Product';
 
         if (!imageUrl) {
@@ -60,11 +65,15 @@ function initializeCarousel() {
 
         const carouselItem = document.createElement('div');
         carouselItem.className = 'carousel-item';
+        carouselItem.setAttribute('data-index', index);
+        
         // Click event to open product details modal in the parent
         carouselItem.onclick = () => {
-            window.parent.postMessage({
-                productImage: item.images[0]
-            }, '*');
+            if (!isDragging) {
+                window.parent.postMessage({
+                    productImage: item.images[0]
+                }, '*');
+            }
         };
 
         // Add HTML for the image, tag, and name
@@ -90,58 +99,71 @@ function initializeCarousel() {
         progressIndicator.appendChild(dot);
     }
 
-    // Add drag gesture
+    // Add drag gesture (mouse and touch)
+    const carousel = document.getElementById('carousel');
     carousel.addEventListener('mousedown', startDrag);
-    carousel.addEventListener('mouseup', endDrag);
-    carousel.addEventListener('mouseleave', endDrag);
-    carousel.addEventListener('mousemove', handleDrag);
+    carousel.addEventListener('touchstart', startDrag, { passive: false });
     
-    // Set initial position to center the first element after a short delay
+    // Global event listeners for drag handling
+    document.addEventListener('mousemove', handleDrag);
+    document.addEventListener('touchmove', handleDrag, { passive: false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+    
+    // Set initial position to center the first element
     setTimeout(() => {
-        currentIndex = 1; // First real item (index 0 is the last item clone, index 1 is first real item)
+        currentIndex = 1;
         updateCarousel();
     }, 100);
 }
 
-
 function startAutoSlide() {
-    clearInterval(autoSlideInterval); // Clear any existing interval
-
+    clearInterval(autoSlideInterval);
     autoSlideInterval = setInterval(() => {
-        slideTo(currentIndex + 1);
+        if (!isDragging && !isAnimating) {
+            slideTo(currentIndex + 1);
+        }
     }, slideDuration);
 }
 
 function slideTo(index) {
-    if (isAnimating) return;
+    if (isAnimating || isDragging) return;
     isAnimating = true;
 
     const carousel = document.getElementById('carousel');
     currentIndex = index;
 
-    // Loop the slides
-    if (currentIndex <= 0) {
+    // Handle infinite loop
+    modifyCurrentIndex(currentIndex);
+
+    updateCarousel();
+    updateBackground(items[currentIndex].images[0]);
+}
+
+function modifyCurrentIndex(index) {
+    const carousel = document.getElementById('carousel');
+    
+    if (index <= 0) {
+        // Jump to the last real item (items.length - 2)
         currentIndex = items.length - 2;
         carousel.style.transition = 'none';
         updateCarousel();
         setTimeout(() => {
-            carousel.style.transition = 'transform 0.5s ease';
-            slideTo(currentIndex - 1);
+            carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            updateCarousel();
         }, 50);
-        return;
-    } else if (currentIndex >= items.length - 1) {
+    } else if (index >= items.length - 1) {
+        // Jump to the first real item (index 1)
         currentIndex = 1;
         carousel.style.transition = 'none';
         updateCarousel();
         setTimeout(() => {
-            carousel.style.transition = 'transform 0.5s ease';
-            slideTo(currentIndex + 1);
+            carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            updateCarousel();
         }, 50);
-        return;
+    } else {
+        carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     }
-
-    updateCarousel();
-    updateBackground(items[currentIndex].images[0]);
 }
 
 function updateCarousel() {
@@ -149,31 +171,33 @@ function updateCarousel() {
     const carousel = document.getElementById('carousel');
     const carouselItem = document.querySelector(".carousel-item");
 
-    if (!carouselItem) return;
+    if (!carouselItem || !carouselWrapper) return;
 
-    // Get screen width
-    const screenWidth = window.innerWidth;
-    const carouselWrapperWidth = carouselWrapper.clientWidth;
-
-    // Calculate the width of a single slide
-    const slideWidth = carouselItem.clientWidth;
-    // Get margin (padding) from both sides
-    const margin = parseInt(getComputedStyle(carouselItem).marginLeft) || 0;
-    const marginRight = parseInt(getComputedStyle(carouselItem).marginRight) || 0;
-    const totalMargin = margin + marginRight;
+    // Get wrapper width (similar to iOS: UIScreen.main.bounds.width - 2 * toBorderSpacing)
+    const wrapperWidth = carouselWrapper.clientWidth;
     
-    // Calculate move distance: element width + padding (margin)
-    const moveWidth = slideWidth + totalMargin;
+    // Get actual item width (should be wrapperWidth * zoomRatio in normal state)
+    const actualItemWidth = carouselItem.clientWidth;
+    
+    // Calculate move distance: item width + spacing (similar to iOS)
+    const moveDistance = actualItemWidth + spacing;
+    
+    // Calculate offset to center the current item
+    // Center position = wrapper center - item center
+    const wrapperCenter = wrapperWidth / 2;
+    const itemCenter = actualItemWidth / 2;
+    
+    // Calculate how far the current item is from the first real item (index 1)
+    const indexOffset = currentIndex - 1;
+    
+    // Calculate final position: center - (indexOffset * moveDistance) + dragOffset
+    const finalOffset = wrapperCenter - itemCenter - (indexOffset * moveDistance) + dragOffset;
 
-    // Calculate the offset to center the current slide
-    // Center position = wrapper width / 2 - slide width / 2
-    const centerOffset = carouselWrapperWidth / 2 - slideWidth / 2;
-    // Calculate translateX: center offset minus (currentIndex * moveWidth)
-    const translateX = centerOffset - currentIndex * moveWidth;
+    // Update the transform
+    carousel.style.transform = `translateX(${finalOffset}px)`;
 
-    // Update the transform to show the current slide
-    carousel.style.transition = 'transform 0.5s ease';
-    carousel.style.transform = `translateX(${translateX}px)`;
+    // Update item sizes based on drag (similar to iOS zoom effect)
+    updateItemSizes();
 
     isAnimating = false;
 
@@ -184,67 +208,173 @@ function updateCarousel() {
     });
 }
 
+function updateItemSizes() {
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    const carouselWrapper = document.querySelector('.carousel-wrapper');
+    if (!carouselWrapper) return;
+    
+    const wrapperWidth = carouselWrapper.clientWidth;
+    
+    // Get base width from first item's data attribute or calculate from height
+    const firstItem = carouselItems[0];
+    let baseItemWidth;
+    if (firstItem && firstItem.getAttribute('data-base-width')) {
+        baseItemWidth = parseFloat(firstItem.getAttribute('data-base-width'));
+    } else {
+        // Fallback: calculate from height (aspect ratio 16:9)
+        const itemHeight = firstItem ? firstItem.clientHeight : wrapperWidth * 16 / 9;
+        baseItemWidth = itemHeight * 0.95 * 9 / 16;
+    }
+    
+    carouselItems.forEach((item, index) => {
+        const isCurrent = index === currentIndex;
+        
+        if (isDragging && dragOffset !== 0) {
+            // Calculate drag difference (similar to iOS: dragOffset / width * proxy.size.width * (1 - zoomRatio))
+            const dragDiff = (dragOffset / wrapperWidth) * wrapperWidth * (1 - zoomRatio);
+            
+            if (isCurrent) {
+                // Current item: max(baseWidth, wrapperWidth - abs(dragDiff))
+                // In iOS: max(proxy.size.width*zoomRatio, proxy.size.width - abs(dragDiff))
+                const currentWidth = Math.max(
+                    baseItemWidth,
+                    wrapperWidth - Math.abs(dragDiff)
+                );
+                item.style.width = `${currentWidth}px`;
+            } else {
+                // Other items: min(baseWidth + abs(dragDiff), wrapperWidth)
+                // In iOS: min(proxy.size.width * zoomRatio + abs(dragDiff), proxy.size.width)
+                const otherWidth = Math.min(
+                    baseItemWidth + Math.abs(dragDiff),
+                    wrapperWidth
+                );
+                item.style.width = `${otherWidth}px`;
+            }
+        } else {
+            // Normal state - all items use base width
+            item.style.width = `${baseItemWidth}px`;
+        }
+    });
+}
 
 function updateBackground(imageUrl) {
     const background = document.getElementById('background');
-    background.style.backgroundImage = `url('${imageUrl}')`;
+    if (background) {
+        background.style.backgroundImage = `url('${imageUrl}')`;
+    }
 }
 
-// Dragging functions
+// Dragging functions (similar to iOS DragGesture)
+let dragStartY = 0;
+
 function startDrag(event) {
-    clearInterval(autoSlideInterval); // Clear the auto-slide interval when dragging starts
-    dragStartX = event.clientX;
+    // Check if it's a touch or mouse event
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+    
+    // Store initial position
+    dragStartX = clientX;
+    dragStartY = clientY;
+    
+    isDragging = false; // Will be set to true if horizontal movement detected
     dragOffset = 0;
+    clearInterval(autoSlideInterval); // Stop auto slide when dragging starts
+    
+    event.preventDefault();
 }
 
 function handleDrag(event) {
     if (dragStartX === null) return;
-    dragOffset = event.clientX - dragStartX;
+    
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+    const deltaX = clientX - dragStartX;
+    const deltaY = clientY - dragStartY;
+    
+    // Only start drag if horizontal movement is greater than vertical (similar to iOS)
+    if (!isDragging && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        isDragging = true;
+    }
+    
+    if (isDragging) {
+        dragOffset = deltaX;
+        updateCarousel(); // Update position in real-time during drag
+        event.preventDefault();
+    }
 }
 
 function endDrag(event) {
-    if (dragOffset > 50) {
-        slideTo(currentIndex - 1);
-    } else if (dragOffset < -50) {
-        slideTo(currentIndex + 1);
+    if (dragStartX === null) return;
+    
+    const clientX = event.changedTouches ? event.changedTouches[0].clientX : (event.clientX || dragStartX);
+    const finalDragOffset = clientX - dragStartX;
+    
+    // Only process if it was a drag (not just a click)
+    if (isDragging) {
+        // Determine if we should change index (similar to iOS: > 50 or < -50)
+        let newIndex = currentIndex;
+        if (finalDragOffset > 50) {
+            // Swipe right, go to previous
+            newIndex = currentIndex - 1;
+        } else if (finalDragOffset < -50) {
+            // Swipe left, go to next
+            newIndex = currentIndex + 1;
+        }
+        
+        // Update to new index
+        if (newIndex !== currentIndex) {
+            slideTo(newIndex);
+        } else {
+            // Just snap back to current position
+            dragOffset = 0;
+            updateCarousel();
+        }
     }
-    dragStartX = null;
+    
+    // Reset drag state
     dragOffset = 0;
-    startAutoSlide(); // Restart the auto-slide after dragging ends
+    dragStartX = null;
+    dragStartY = 0;
+    isDragging = false;
+    
+    // Restart auto slide
+    startAutoSlide();
 }
-
-let slideWidth = 0; // Width of each slide in pixels
-
 
 function adjustCarouselHeight() {
     const browserHeight = window.innerHeight;
     const carouselWrapper = document.querySelector('.carousel-wrapper');
     const carouselItems = document.querySelectorAll('.carousel-item');
-
-    // Get screen width
     const screenWidth = window.innerWidth;
 
-    // Set the height of the carousel wrapper
+    if (!carouselWrapper) return;
+
+    // Set the height and width of the carousel wrapper
     carouselWrapper.style.height = `${browserHeight * 0.95}px`;
     carouselWrapper.style.width = `${screenWidth}px`;
 
+    // Calculate item dimensions based on height (aspect ratio 16:9)
+    const itemHeight = browserHeight * 0.8;
+    const baseItemWidth = itemHeight * 0.95 * 9 / 16;
+
+    // Set height for all items, but width will be controlled by updateItemSizes
     carouselItems.forEach((item) => {
-        item.style.height = `${browserHeight * 0.8}px`;
-        item.style.width = `${browserHeight * 0.8 * 0.95 * 9 / 16}px`;
+        item.style.height = `${itemHeight}px`;
+        // Store base width as data attribute for reference
+        item.setAttribute('data-base-width', baseItemWidth);
     });
     
-    // Update carousel position after adjusting height
-    // Set initial position to center the first element (index 1, which is the first real item)
+    // Update carousel position and item sizes after adjusting height
     if (carouselItems.length > 0) {
-        // Wait a bit for layout to settle
         setTimeout(() => {
-            currentIndex = 1; // Reset to first real item
+            currentIndex = 1;
+            updateItemSizes();
             updateCarousel();
         }, 100);
     }
 }
 
-
-// Optionally, adjust the height on window resize
-window.addEventListener('resize', adjustCarouselHeight);
-
+// Adjust on window resize
+window.addEventListener('resize', () => {
+    adjustCarouselHeight();
+});

@@ -33,19 +33,22 @@ body {
 
 .carousel {
     display: flex;
-    transition: transform 0.5s ease;
     align-items: center;
+    will-change: transform;
+    /* Transition will be set dynamically in JavaScript */
 }
 
 .carousel-item {
     position: relative; /* Enable absolute positioning for child elements */
     flex: 0 0 auto;
-    margin: 0 10px;
+    margin: 0 10px; /* This matches spacing/2 in JavaScript */
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     border-radius: 20px;
+    transition: width 0.3s ease;
+    will-change: width;
 }
 
 .image-container {
