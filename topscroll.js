@@ -12,9 +12,17 @@ const spacing = 20; // spacing between items
 const zoomRatio = 0.9; // zoom ratio for non-current items
 const defaultPadding = 2; // default padding
 
-document.addEventListener('DOMContentLoaded', () => {
+// Ensure initialization runs whether DOM is already loaded or not
+function init() {
     fetchHomePageData();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    // DOM already loaded, run immediately
+    init();
+}
 
 function fetchHomePageData() {
     const apiURL = 'https://api.jojoteashoppe.com/api/pages/APP_HOME';
