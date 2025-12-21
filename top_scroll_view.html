@@ -6,10 +6,10 @@
     <title>Top Scroll View</title>
     <script>
         // Load CSS with version from parent or use timestamp
-        const version = new URLSearchParams(window.location.search).get('v') || Date.now();
+        window.version = new URLSearchParams(window.location.search).get('v') || Date.now();
         const cssLink = document.createElement('link');
         cssLink.rel = 'stylesheet';
-        cssLink.href = 'topscroll.css?v=' + version;
+        cssLink.href = 'topscroll.css?v=' + window.version;
         document.head.appendChild(cssLink);
     </script>
 </head>
@@ -28,9 +28,8 @@
 
 <script>
     // Load JS with version from parent or use timestamp
-    const version = new URLSearchParams(window.location.search).get('v') || Date.now();
     const script = document.createElement('script');
-    script.src = 'topscroll.js?v=' + version;
+    script.src = 'topscroll.js?v=' + (window.version || new URLSearchParams(window.location.search).get('v') || Date.now());
     document.body.appendChild(script);
 </script>
 </body>
