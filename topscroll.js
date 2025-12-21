@@ -100,7 +100,6 @@ function initializeCarousel() {
     }
 
     // Add drag gesture (mouse and touch)
-    const carousel = document.getElementById('carousel');
     carousel.addEventListener('mousedown', startDrag);
     carousel.addEventListener('touchstart', startDrag, { passive: false });
     
